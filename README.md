@@ -1,3 +1,5 @@
+[ASSISTA À INTRODUÇÃO E EXPLICAÇÃO DO TESTE NESSE LINK: https://drive.google.com/file/d/1YvwdWBMQY3dbOrNHCTeaLstfufdNNDdb/view?usp=sharing]
+
 # Instalação
 1. Clone o repositório
 2. Tenha o PHP 8.3 instalado na sua máquina, composer 2, e ative as extensões solicitadas pelo composer ao executar "composer install"
