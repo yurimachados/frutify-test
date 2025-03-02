@@ -1,4 +1,4 @@
-[ASSISTA À INTRODUÇÃO E EXPLICAÇÃO DO TESTE NESSE LINK: https://drive.google.com/file/d/1YvwdWBMQY3dbOrNHCTeaLstfufdNNDdb/view?usp=sharing]
+Objetivo: Faça todos os testes passarem, aplicando as melhores práticas do Laravel e do SOLID e clean arch
 
 # Instalação
 1. Clone o repositório
@@ -10,5 +10,3 @@
 
 7. Após a conclusão do teste, crie um repositório no github, e suba sua resolução no repositório
 8. Envie o link do repositório para o WhatsApp 41 98702-5814
-
-9. Prazo: 22/02/2025
