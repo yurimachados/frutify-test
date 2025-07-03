@@ -1,4 +1,9 @@
-Objetivo: Faça todos os testes passarem, aplicando as melhores práticas do Laravel e do SOLID e clean arch
+Objetivo:
+
+Avaliacao Back-end: [ ] Faça todos os testes passarem, aplicando as melhores práticas do Laravel e do SOLID e clean arch
+Avaliacao Front-end: [ ] Implemente um front-end utilizando Inertia.js, Vue3 e TailwindCss para o CRUD de contatos
+
+* Plus: Sinta-se livre para implementar melhorias e mais features como quiser, como por exemplo, o disparo de um e-mail para o contato, quando esse contato é deletado do sistema.
 
 # Instalação
 1. Clone o repositório
