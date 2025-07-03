@@ -19,7 +19,7 @@ Route::group(['prefix' => 'contacts'], function () {
 
     Route::get('/', [ContactController::class, 'index'])->name('contacts.index');
     Route::get('/create', [ContactController::class, 'create'])->name('contacts.create');
-    Route::get('/{contact}', [ContactController::class, 'show'])->name('contacts.show');
-    Route::get('/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
+    Route::get('/{id}', [ContactController::class, 'show'])->name('contacts.show');
+    Route::get('/{id}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
 });
 
