@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class CreateContactsTest extends TestCase
 {
+    use RefreshDatabase;
+
     #[Test]
     public function it_should_be_able_to_create_a_new_contact(): void
     {
@@ -20,8 +22,9 @@ class CreateContactsTest extends TestCase
 
         $response = $this->post('/contacts', $data);
 
-        $response->assertStatus(200);
-
+        // The right status code for creation is 201
+        // 200 is used for successful updates or retrievals
+        $response->assertStatus(201);
 
         $expected = $data;
         $expected['phone'] = preg_replace('/\D/', '', $expected['phone']);
