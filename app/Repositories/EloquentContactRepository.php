@@ -42,4 +42,32 @@ class EloquentContactRepository implements ContactRepositoryInterface
     {
         return Contact::where('email', $email)->exists();
     }
+
+    /**
+     * Find contact by ID.
+     *
+     * @param int $id
+     * @return Contact|null
+     */
+    public function findById(int $id): ?Contact
+    {
+        return Contact::find($id);
+    }
+
+    /**
+     * Delete a contact.
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id): bool
+    {
+        $contact = Contact::find($id);
+
+        if (!$contact) {
+            return false;
+        }
+
+        return $contact->delete();
+    }
 }
