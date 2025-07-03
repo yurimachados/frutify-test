@@ -2,55 +2,54 @@
 
 namespace App\Http\Controllers\Contacts;
 
-use App\DTOs\CreateContactDto;
+use App\DTOs\UpdateContactDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
 use App\Http\Resources\ContactResource;
-use App\UseCases\Contact\CreateContactUseCase;
+use App\UseCases\Contact\UpdateContactUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 /**
- * HTTP controller for contact creation operations.
+ * HTTP controller for contact update operations.
  *
- * Handles contact creation requests by delegating business logic
+ * Handles contact update requests by delegating business logic
  * to the use case layer while managing HTTP responses and errors.
  */
-class CreateContactController extends Controller
+class UpdateContactController extends Controller
 {
     /**
-     * Create a new contact creation controller instance.
+     * Create a new update contact controller instance.
      *
-     * @param CreateContactUseCase $createContactUseCase Business logic handler
+     * @param UpdateContactUseCase $updateContactUseCase Business logic handler
      */
     public function __construct(
-        private CreateContactUseCase $createContactUseCase
+        private UpdateContactUseCase $updateContactUseCase
     ) {}
 
     /**
-     * Store a newly created contact.
+     * Update an existing contact.
      *
      * Processes validated contact data through the use case layer
      * and returns appropriate HTTP responses based on operation result.
      *
      * @param ContactRequest $request Validated contact request
+     * @param int $contactId Contact identifier to update
      * @return ContactResource|JsonResponse|RedirectResponse
      */
-    public function __invoke(ContactRequest $request): ContactResource|JsonResponse|RedirectResponse
+    public function __invoke(ContactRequest $request, int $contactId): ContactResource|JsonResponse|RedirectResponse
     {
         try {
             $validatedContactData = $request->validated();
-            $createContactData = CreateContactDto::fromArray($validatedContactData);
+            $updateContactData = UpdateContactDto::fromArray($contactId, $validatedContactData);
 
-            $createdContact = $this->createContactUseCase->execute($createContactData);
+            $updatedContact = $this->updateContactUseCase->execute($updateContactData);
 
-            return (new ContactResource($createdContact))
+            return (new ContactResource($updatedContact))
                 ->response()
-                ->setStatusCode(201);
-
+                ->setStatusCode(200);
         } catch (\InvalidArgumentException $businessRuleError) {
-            return redirect()
-                ->back()
+            return back()
                 ->withInput()
                 ->withErrors(['email' => $businessRuleError->getMessage()]);
         }
