@@ -6,68 +6,85 @@ use App\Models\Contact;
 use App\Repositories\Contracts\ContactRepositoryInterface;
 
 /**
- * Eloquent implementation of ContactRepositoryInterface.
+ * Eloquent-based implementation of contact repository.
+ *
+ * Provides contact data access operations using Laravel's Eloquent ORM,
+ * implementing the ContactRepositoryInterface contract.
  */
 class EloquentContactRepository implements ContactRepositoryInterface
 {
     /**
-     * Create a new contact.
+     * Create a new contact record.
      *
-     * @param array $data
-     * @return Contact
+     * @param array $contactData Contact attributes
+     * @return Contact Created contact instance
      */
-    public function create(array $data): Contact
+    public function create(array $contactData): Contact
     {
-        return Contact::create($data);
+        return Contact::create($contactData);
     }
 
     /**
-     * Find contact by email.
+     * Find contact by email address.
      *
-     * @param string $email
-     * @return Contact|null
+     * @param string $emailAddress Contact email address
+     * @return Contact|null Contact instance or null if not found
      */
-    public function findByEmail(string $email): ?Contact
+    public function findByEmail(string $emailAddress): ?Contact
     {
-        return Contact::where('email', $email)->first();
+        return Contact::where('email', $emailAddress)->first();
     }
 
     /**
-     * Check if email exists.
+     * Check if email address is already registered.
      *
-     * @param string $email
-     * @return bool
+     * @param string $emailAddress Email address to verify
+     * @return bool True if email exists, false otherwise
      */
-    public function emailExists(string $email): bool
+    public function emailExists(string $emailAddress): bool
     {
-        return Contact::where('email', $email)->exists();
+        return Contact::where('email', $emailAddress)->exists();
     }
 
     /**
-     * Find contact by ID.
+     * Find contact by unique identifier.
      *
-     * @param int $id
-     * @return Contact|null
+     * @param int $contactId Contact identifier
+     * @return Contact|null Contact instance or null if not found
      */
-    public function findById(int $id): ?Contact
+    public function findById(int $contactId): ?Contact
     {
-        return Contact::find($id);
+        return Contact::find($contactId);
     }
 
     /**
-     * Delete a contact.
+     * Update existing contact record.
      *
-     * @param int $id
-     * @return bool
+     * @param int $contactId Contact identifier
+     * @param array $contactData Updated contact attributes
+     * @return Contact Fresh instance of updated contact
      */
-    public function delete(int $id): bool
+    public function update(int $contactId, array $contactData): Contact
     {
-        $contact = Contact::find($id);
+        $contact = Contact::findOrFail($contactId);
+        $contact->update($contactData);
+        return $contact->fresh();
+    }
 
-        if (!$contact) {
+    /**
+     * Delete contact by identifier.
+     *
+     * @param int $contactId Contact identifier
+     * @return bool True if deletion was successful, false if contact not found
+     */
+    public function delete(int $contactId): bool
+    {
+        $contactToDelete = Contact::find($contactId);
+
+        if (!$contactToDelete) {
             return false;
         }
 
-        return $contact->delete();
+        return $contactToDelete->delete();
     }
 }
