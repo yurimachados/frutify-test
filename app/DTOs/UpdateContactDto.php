@@ -4,7 +4,7 @@ namespace App\DTOs;
 
 /**
  * Data Transfer Object for contact update operations.
- * 
+ *
  * Encapsulates contact data required for update operations,
  * ensuring type safety and immutability.
  */

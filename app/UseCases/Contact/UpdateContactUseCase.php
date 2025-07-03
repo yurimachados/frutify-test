@@ -8,7 +8,7 @@ use App\Repositories\Contracts\ContactRepositoryInterface;
 
 /**
  * Business logic for updating existing contacts.
- * 
+ *
  * Handles email uniqueness validation and contact data updates
  * while maintaining business rules and data integrity.
  */
@@ -53,7 +53,7 @@ class UpdateContactUseCase
     private function validateEmailUniqueness(UpdateContactDto $contactData): void
     {
         $existingContactWithEmail = $this->contactRepository->findByEmail($contactData->email);
-        
+
         if ($existingContactWithEmail && $existingContactWithEmail->id !== $contactData->id) {
             throw new \InvalidArgumentException('Email already exists');
         }
