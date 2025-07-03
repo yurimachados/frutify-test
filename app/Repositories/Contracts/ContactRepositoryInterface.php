@@ -54,6 +54,14 @@ interface ContactRepositoryInterface
     public function update(int $contactId, array $contactData): Contact;
 
     /**
+     * Get paginated list of contacts.
+     *
+     * @param int $perPage Number of contacts per page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getPaginated(int $perPage = 10): \Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+    /**
      * Delete contact by identifier.
      *
      * @param int $contactId Contact identifier

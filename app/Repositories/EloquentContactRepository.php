@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Contact;
 use App\Repositories\Contracts\ContactRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Eloquent-based implementation of contact repository.
@@ -69,6 +70,17 @@ class EloquentContactRepository implements ContactRepositoryInterface
         $contact = Contact::findOrFail($contactId);
         $contact->update($contactData);
         return $contact->fresh();
+    }
+
+    /**
+     * Get paginated list of contacts.
+     *
+     * @param int $perPage Number of contacts per page
+     * @return LengthAwarePaginator
+     */
+    public function getPaginated(int $perPage = 10): LengthAwarePaginator
+    {
+        return Contact::paginate($perPage);
     }
 
     /**
