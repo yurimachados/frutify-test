@@ -1,17 +1,18 @@
-Objetivo:
+Objective:
 
-Avaliacao Back-end: [ ] Faça todos os testes passarem, aplicando as melhores práticas do Laravel e do SOLID e clean arch
-Avaliacao Front-end: [ ] Implemente um front-end utilizando Inertia.js, Vue3 e TailwindCss para o CRUD de contatos
+Back-end Assessment: [ ] Make all tests pass, applying the best practices of Laravel and SOLID and clean arch
 
-* Plus: Sinta-se livre para implementar melhorias e mais features como quiser, como por exemplo, o disparo de um e-mail para o contato, quando esse contato é deletado do sistema.
+Front-end Assessment: [ ] Implement a front-end using Inertia.js, Vue3 and TailwindCss for contact CRUD
 
-# Instalação
-1. Clone o repositório
-2. Tenha o PHP 8.3 instalado na sua máquina, composer 2, e ative as extensões solicitadas pelo composer ao executar "composer install"
-3. Execute "Composer install"
-4. Crie um arquivo .env e cole o conteúdo de .env.example
-5. Execute o comando php artisan key:generate
-6. Execute o comando php artisan test, resolva os testes
+* Plus: Feel free to implement improvements and more features as you wish, such as sending an email to the contact when that contact is deleted from the system.
 
-7. Após a conclusão do teste, crie um repositório no github, e suba sua resolução no repositório
-8. Envie o link do repositório para o WhatsApp 41 98702-5814
+# Installation
+1. Clone the repository
+2. Have PHP 8.3 installed on your machine, composer 2, and activate the extensions requested by composer when running "composer install"
+3. Run "Composer install"
+4. Create a .env file and paste the contents of .env.example
+5. Run the command php artisan key:generate
+6. Run the command php artisan test, solve the tests
+
+7. After the test is complete, create a repository on github, and upload your resolution to the repository
+8. Send the repository link to WhatsApp 41 98702-5814
