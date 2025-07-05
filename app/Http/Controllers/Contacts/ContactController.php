@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Contacts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchContactsRequest;
 use App\UseCases\Contact\FindContactUseCase;
 use App\UseCases\Contact\ListContactsUseCase;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -33,14 +35,19 @@ class ContactController extends Controller
      * Delegates to use case layer for business logic and
      * renders the index view with paginated results.
      *
+     * @param SearchContactsRequest $request HTTP request with search parameters
      * @return View Contact index view with paginated contacts
      */
-    public function index(): View
+    public function index(SearchContactsRequest $request): View
     {
-        $paginatedContacts = $this->listContactsUseCase->execute();
+        $search = $request->getSearch();
+        $perPage = $request->getPerPage();
+        
+        $paginatedContacts = $this->listContactsUseCase->execute($perPage, $search);
 
         return view('contacts.index', [
-            'contacts' => $paginatedContacts
+            'contacts' => $paginatedContacts,
+            'search' => $search
         ]);
     }
 
