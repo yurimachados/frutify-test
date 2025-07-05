@@ -11,11 +11,10 @@ Route::get('/', function () {
 });
 
 // Contact routes
-Route::group(['prefix' => 'contacts'], function () {
+Route::group(['prefix' => 'contacts', 'middleware' => 'throttle:60,1'], function () {
     Route::post('/', CreateContactController::class)->name('contacts.store');
     Route::put('/{id}', UpdateContactController::class)->name('contacts.update');
     Route::delete('/{contactId}', DeleteContactController::class)->name('contacts.destroy');
-
 
     Route::get('/', [ContactController::class, 'index'])->name('contacts.index');
     Route::get('/create', [ContactController::class, 'create'])->name('contacts.create');
