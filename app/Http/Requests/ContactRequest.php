@@ -21,10 +21,12 @@ class ContactRequest extends FormRequest
      */
     public function rules(): array
     {
+        $contactId = $this->route('id') ?? $this->route('contactId');
+        
         return [
             'name' => 'required|string|min:3|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|min:10|max:20',
+            'email' => 'required|email|max:255|unique:contacts,email,' . $contactId,
+            'phone' => 'required|string|min:10|max:20|regex:/^[\d\s\(\)\-\+]+$/',
         ];
     }
 
