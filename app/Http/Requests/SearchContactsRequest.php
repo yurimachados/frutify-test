@@ -62,11 +62,11 @@ class SearchContactsRequest extends FormRequest
     public function getSearch(): ?string
     {
         $search = $this->input('search');
-        
+
         if (empty($search)) {
             return null;
         }
-        
+
         return trim($search);
     }
 
