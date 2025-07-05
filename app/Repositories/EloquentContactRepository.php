@@ -84,10 +84,11 @@ class EloquentContactRepository implements ContactRepositoryInterface
         $query = Contact::query();
 
         if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%')
-                  ->orWhere('phone', 'like', '%' . $search . '%');
+            $searchTerm = '%' . strtolower($search) . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->whereRaw('LOWER(name) LIKE ?', [$searchTerm])
+                  ->orWhereRaw('LOWER(email) LIKE ?', [$searchTerm])
+                  ->orWhere('phone', 'like', $searchTerm);
             });
         }
 

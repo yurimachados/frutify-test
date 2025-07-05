@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\Contact;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Contract defining contact data access operations.
@@ -57,9 +58,10 @@ interface ContactRepositoryInterface
      * Get paginated list of contacts.
      *
      * @param int $perPage Number of contacts per page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param string|null $search Search term
+     * @return LengthAwarePaginator
      */
-    public function getPaginated(int $perPage = 10): \Illuminate\Contracts\Pagination\LengthAwarePaginator;
+    public function getPaginated(int $perPage = 10, ?string $search = null): LengthAwarePaginator;
 
     /**
      * Delete contact by identifier.

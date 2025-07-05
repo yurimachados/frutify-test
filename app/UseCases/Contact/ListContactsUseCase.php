@@ -21,12 +21,13 @@ class ListContactsUseCase
      * Get paginated contacts list.
      *
      * @param int $perPage Items per page (1-100, default: 10)
+     * @param string|null $search Search term for filtering contacts
      * @return LengthAwarePaginator Paginated contacts
      */
-    public function execute(int $perPage = 10): LengthAwarePaginator
+    public function execute(int $perPage = 10, ?string $search = null): LengthAwarePaginator
     {
         $validatedPerPage = max(1, min($perPage, 100));
 
-        return $this->repository->getPaginated($validatedPerPage);
+        return $this->repository->getPaginated($validatedPerPage, $search);
     }
 }
