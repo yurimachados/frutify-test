@@ -47,24 +47,24 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <a href="{{ route('contacts.show', $contact->id) }}" 
-                                                   class="btn btn-outline-primary" 
+                                                <a href="{{ route('contacts.show', $contact->id) }}"
+                                                   class="btn btn-outline-primary"
                                                    title="Visualizar">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('contacts.edit', $contact->id) }}" 
-                                                   class="btn btn-outline-warning" 
+                                                <a href="{{ route('contacts.edit', $contact->id) }}"
+                                                   class="btn btn-outline-warning"
                                                    title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form method="POST" 
-                                                      action="{{ route('contacts.destroy', $contact->id) }}" 
-                                                      style="display: inline;" 
+                                                <form method="POST"
+                                                      action="{{ route('contacts.destroy', $contact->id) }}"
+                                                      style="display: inline;"
                                                       onsubmit="return confirm('Tem certeza que deseja excluir este contato?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
-                                                            class="btn btn-outline-danger" 
+                                                    <button type="submit"
+                                                            class="btn btn-outline-danger"
                                                             title="Excluir">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
@@ -76,10 +76,10 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div>
-                            Mostrando {{ $contacts->firstItem() }} a {{ $contacts->lastItem() }} 
+                            Mostrando {{ $contacts->firstItem() }} a {{ $contacts->lastItem() }}
                             de {{ $contacts->total() }} contatos
                         </div>
                         <div>
