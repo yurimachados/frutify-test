@@ -5,13 +5,9 @@ use App\Http\Controllers\Contacts\ContactController;
 use App\Http\Controllers\Contacts\DeleteContactController;
 use App\Http\Controllers\Contacts\UpdateContactController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'title' => 'Bem-vindo ao Laravel + Inertia + Vue 3',
-        'laravelVersion' => app()->version()
-    ]);
+    return view('welcome');
 });
 
 // Contact routes
