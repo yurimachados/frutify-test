@@ -76,11 +76,22 @@ class EloquentContactRepository implements ContactRepositoryInterface
      * Get paginated list of contacts.
      *
      * @param int $perPage Number of contacts per page
+     * @param string|null $search Search term
      * @return LengthAwarePaginator
      */
-    public function getPaginated(int $perPage = 10): LengthAwarePaginator
+    public function getPaginated(int $perPage = 10, ?string $search = null): LengthAwarePaginator
     {
-        return Contact::paginate($perPage);
+        $query = Contact::query();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        }
+
+        return $query->orderBy('name')->paginate($perPage);
     }
 
     /**
