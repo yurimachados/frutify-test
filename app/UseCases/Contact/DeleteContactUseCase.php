@@ -2,13 +2,17 @@
 
 namespace App\UseCases\Contact;
 
-use App\Models\Contact;
-use App\Repositories\Contracts\ContactRepositoryInterface;
+use App\Contracts\UseCases\Contact\DeleteContactUseCaseInterface;
+use App\Exceptions\Contact\ContactNotFoundException;
+use App\Contracts\Repositories\Contacts\ContactRepositoryInterface;
 
 /**
  * Use case for deleting a contact.
+ *
+ * Handles contact deletion with proper validation and
+ * business rule enforcement.
  */
-class DeleteContactUseCase
+class DeleteContactUseCase implements DeleteContactUseCaseInterface
 {
     public function __construct(
         private ContactRepositoryInterface $contactRepository
@@ -19,18 +23,18 @@ class DeleteContactUseCase
      *
      * @param int $contactId
      * @return bool
-     * @throws \InvalidArgumentException
+     * @throws ContactNotFoundException When contact doesn't exist
      */
     public function execute(int $contactId): bool
     {
         // Business rule: Check if contact exists
-        $contact = $this->contactRepository->findById($contactId);
+        $contact = $this->contactRepository->find($contactId);
 
         if (!$contact) {
-            throw new \InvalidArgumentException('Contact not found');
+            throw new ContactNotFoundException($contactId);
         }
 
-        // Delete the contact
-        return $this->contactRepository->delete($contactId);
+        // Delete the contact (soft delete)
+        return $this->contactRepository->delete($contact);
     }
 }

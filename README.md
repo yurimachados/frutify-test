@@ -1,18 +1,111 @@
-Objective:
+# Contact Management System – Backend Test
 
-Back-end Assessment: [ ] Make all tests pass, applying the best practices of Laravel and SOLID and clean arch
+This project presents a clean, scalable backend solution for managing contacts, built with Laravel. Originally designed to meet the requirements of a technical assessment, the implementation goes beyond the basics by applying modern architectural standards and engineering best practices.
 
-Front-end Assessment: [ ] Implement a front-end using Inertia.js, Vue3 and TailwindCss for contact CRUD
+---
 
-* Plus: Feel free to implement improvements and more features as you wish, such as sending an email to the contact when that contact is deleted from the system.
+## 1. Objective
 
-# Installation
-1. Clone the repository
-2. Have PHP 8.3 installed on your machine, composer 2, and activate the extensions requested by composer when running "composer install"
-3. Run "Composer install"
-4. Create a .env file and paste the contents of .env.example
-5. Run the command php artisan key:generate
-6. Run the command php artisan test, solve the tests
+The core challenge was to ensure **all existing tests passed**, while maintaining clean, well-structured, and extensible code. The solution adopts **Clean Architecture**, follows **SOLID principles**, and is fully testable.
 
-7. After the test is complete, create a repository on github, and upload your resolution to the repository
-8. Send the repository link to WhatsApp +55 41 98702-5814
+---
+
+## 2. Test Status
+
+```shell
+Tests: 66 passed (177 assertions)
+Duration: 0.62s
+```
+
+All provided tests are passing. In addition to the original 6 tests, **60 new tests** were implemented to ensure coverage of all possible application scenarios. The testing structure remains modular and ready for future expansion.
+
+---
+
+## 3. Improvements & Features
+
+### 3.1 Architecture & Design
+
+* Clear separation of **application layers** (Controllers, Services, UseCases, Repositories, DTOs)
+* Implementation of **Clean Architecture** for maintainability and testability
+* Use of the **Repository Pattern** for data abstraction
+* Dedicated **Use Cases** encapsulating business logic
+* **Data Transfer Objects (DTOs)** for safe and validated data handling
+* Consistent application of **SOLID principles**
+
+### 3.2 Enhanced Functionality
+
+* **Contact Pagination With Search**: 10-items per page, with validation, graceful fallbacks and multi-field search (name, email, phone) with case-insensitive partial match.
+* **Soft Deletes**: Contacts can be logically deleted and restored from trash
+* **Robust Validation**: Email uniqueness, phone normalization, required fields
+* **Custom Exception Handling**: Consistent and meaningful error responses
+
+### 3.3 Security
+
+* **Eloquent Features**: SQL injection protection via parameter binding and mass assignment control through `fillable` attributes
+* **Input Validation** across all request data
+* **Rate Limiting**: 60 requests/minute/IP via middleware
+* **Safe Error Messages**: No sensitive data leakage in exceptions
+* **Type Safety**: Strict type hints prevent runtime issues
+
+### 3.4 Code Quality & Testing
+
+* **Well-structured test suite** with unit and feature tests
+* Organized by domain and responsibility
+* Adherence to **PSR standards** and clean code principles
+* Rich exception handling and fallback strategies
+
+```bash
+tests/
+├── Unit/              # 21 tests – isolated logic
+│   ├── DTOs/
+│   ├── Models/
+│   ├── Services/
+│   └── UseCases/
+└── Feature/           # 45 tests – end-to-end coverage
+    └── Contacts/
+```
+
+---
+
+## 4. How to Run
+
+### 4.1 Clone and install dependencies
+
+```bash
+git clone <repository>
+composer install
+```
+
+### 4.2 Setup environment
+
+```bash
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+```
+
+### 4.3 Run the test suite
+
+```bash
+php artisan test
+```
+
+---
+
+## 5. Technical Highlights
+
+* **Clean Architecture**: Dependency inversion via contracts
+* **Search System**: Trimmed, normalized, multi-field search
+* **Trash Support**: Restore and view soft-deleted records
+* **Validation Services**: Centralized rules via FormRequest + DTO
+* **Secure Error Handling**: Proper HTTP codes, custom messages
+* **Security Layer**: From input to storage, all operations validated
+* **Test Coverage**: High assertion count, full scenario coverage
+
+---
+
+Built with performance, maintainability, and security in mind.
+
+---
+
+Yuri Machado – Software Engineer – [ymachado1995@gmail.com](mailto:ymachado1995@gmail.com)

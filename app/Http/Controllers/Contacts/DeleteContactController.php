@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Contacts;
 
 use App\Http\Controllers\Controller;
 use App\UseCases\Contact\DeleteContactUseCase;
+use App\Exceptions\Contact\ContactNotFoundException;
 
 /**
  * Handle contact deletion.
@@ -29,8 +30,7 @@ class DeleteContactController extends Controller
             return response()->json([
                 'message' => 'Contact deleted successfully'
             ], 200);
-
-        } catch (\InvalidArgumentException $e) {
+        } catch (ContactNotFoundException $e) {
             return response()->json([
                 'message' => 'Contact not found'
             ], 404);
