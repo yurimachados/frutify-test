@@ -2,7 +2,8 @@
 
 namespace App\UseCases\Contact;
 
-use App\Repositories\Contracts\ContactRepositoryInterface;
+use App\Contracts\UseCases\Contact\ListContactsUseCaseInterface;
+use App\Contracts\Repositories\Contacts\ContactRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  * Handles contact listing with business rules for
  * pagination limits and default values.
  */
-class ListContactsUseCase
+class ListContactsUseCase implements ListContactsUseCaseInterface
 {
     public function __construct(
         private ContactRepositoryInterface $repository

@@ -2,9 +2,14 @@
 
 namespace App\UseCases\Contact;
 
+use App\Contracts\Services\Contact\EmailValidationServiceInterface;
+use App\Contracts\Services\Contact\PhoneServiceInterface;
+use App\Contracts\UseCases\Contact\UpdateContactUseCaseInterface;
 use App\DTOs\UpdateContactDto;
+use App\Exceptions\Contact\ContactNotFoundException;
+use App\Exceptions\Contact\EmailAlreadyExistsException;
 use App\Models\Contact;
-use App\Repositories\Contracts\ContactRepositoryInterface;
+use App\Contracts\Repositories\Contacts\ContactRepositoryInterface;
 
 /**
  * Business logic for updating existing contacts.
@@ -12,15 +17,12 @@ use App\Repositories\Contracts\ContactRepositoryInterface;
  * Handles email uniqueness validation and contact data updates
  * while maintaining business rules and data integrity.
  */
-class UpdateContactUseCase
+class UpdateContactUseCase implements UpdateContactUseCaseInterface
 {
-    /**
-     * Create a new update contact use case instance.
-     *
-     * @param ContactRepositoryInterface $contactRepository
-     */
     public function __construct(
-        private ContactRepositoryInterface $contactRepository
+        private ContactRepositoryInterface $contactRepository,
+        private EmailValidationServiceInterface $emailValidationService,
+        private PhoneServiceInterface $phoneService
     ) {}
 
     /**
@@ -31,53 +33,31 @@ class UpdateContactUseCase
      *
      * @param UpdateContactDto $contactData
      * @return Contact Updated contact instance
-     * @throws \InvalidArgumentException When email already exists for another contact
+     * @throws ContactNotFoundException When contact doesn't exist
+     * @throws EmailAlreadyExistsException When email already exists for another contact
      */
     public function execute(UpdateContactDto $contactData): Contact
     {
-        $this->validateEmailUniqueness($contactData);
-
         // Find the contact first
         $contact = $this->contactRepository->find($contactData->id);
 
         if (!$contact) {
-            throw new \InvalidArgumentException('Contact not found');
+            throw new ContactNotFoundException($contactData->id);
+        }
+
+        // Business rule: Validate email uniqueness (excluding current contact)
+        if (!$this->emailValidationService->isUniqueForContact($contactData->email, $contactData->id)) {
+            throw new EmailAlreadyExistsException($contactData->email);
         }
 
         // Update the contact
         $this->contactRepository->update($contact, [
             'name' => $contactData->name,
             'email' => $contactData->email,
-            'phone' => $this->normalizePhoneNumber($contactData->phone),
+            'phone' => $this->phoneService->normalize($contactData->phone),
         ]);
 
         // Return the updated contact
         return $contact->fresh();
-    }
-
-    /**
-     * Validate that email is unique excluding the current contact.
-     *
-     * @param UpdateContactDto $contactData
-     * @throws \InvalidArgumentException When email already exists
-     */
-    private function validateEmailUniqueness(UpdateContactDto $contactData): void
-    {
-        $existingContactWithEmail = $this->contactRepository->findByEmail($contactData->email);
-
-        if ($existingContactWithEmail && $existingContactWithEmail->id !== $contactData->id) {
-            throw new \InvalidArgumentException('Email already exists');
-        }
-    }
-
-    /**
-     * Remove non-digit characters from phone number.
-     *
-     * @param string $phone
-     * @return string Normalized phone number
-     */
-    private function normalizePhoneNumber(string $phone): string
-    {
-        return preg_replace('/\D/', '', $phone);
     }
 }
