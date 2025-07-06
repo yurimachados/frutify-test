@@ -3,7 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Contact;
-use App\Repositories\Contracts\ContactRepositoryInterface;
+use App\Contracts\Repositories\Contacts\ContactRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ContactRepository extends BaseRepository implements ContactRepositoryInterface
