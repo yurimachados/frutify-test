@@ -9,6 +9,7 @@ use App\Http\Resources\ContactResource;
 use App\UseCases\Contact\UpdateContactUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use App\Exceptions\Contact\ContactNotFoundException;
 
 /**
  * HTTP controller for contact update operations.
@@ -48,6 +49,10 @@ class UpdateContactController extends Controller
             return (new ContactResource($updatedContact))
                 ->response()
                 ->setStatusCode(200);
+        } catch (ContactNotFoundException $e) {
+            return response()->json([
+                'message' => 'Contact not found'
+            ], 404);
         } catch (\InvalidArgumentException $businessRuleError) {
             return back()
                 ->withInput()
