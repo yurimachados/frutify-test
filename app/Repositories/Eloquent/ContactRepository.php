@@ -109,7 +109,17 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
     public function restore(int $id): bool
     {
         $contact = $this->model->withTrashed()->find($id);
-        return $contact ? $contact->restore() : false;
+        
+        if (!$contact) {
+            return false;
+        }
+        
+        // Only restore if the contact is actually trashed
+        if ($contact->trashed()) {
+            return $contact->restore();
+        }
+        
+        return false;
     }
 
     /**
