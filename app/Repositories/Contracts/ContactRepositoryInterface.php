@@ -5,69 +5,78 @@ namespace App\Repositories\Contracts;
 use App\Models\Contact;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-/**
- * Contract defining contact data access operations.
- *
- * Establishes the interface for contact repository implementations,
- * ensuring consistent data access patterns across the application.
- */
-interface ContactRepositoryInterface
+interface ContactRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * Create a new contact record.
-     *
-     * @param array $contactData Contact attributes
-     * @return Contact Created contact instance
-     */
-    public function create(array $contactData): Contact;
-
-    /**
-     * Find contact by unique identifier.
-     *
-     * @param int $contactId Contact identifier
-     * @return Contact|null Contact instance or null if not found
-     */
-    public function findById(int $contactId): ?Contact;
-
     /**
      * Find contact by email address.
      *
-     * @param string $emailAddress Contact email address
-     * @return Contact|null Contact instance or null if not found
+     * @param string $email
+     * @return Contact|null
      */
-    public function findByEmail(string $emailAddress): ?Contact;
+    public function findByEmail(string $email): ?Contact;
 
     /**
-     * Check if email address is already registered.
+     * Find contact by phone number.
      *
-     * @param string $emailAddress Email address to verify
-     * @return bool True if email exists, false otherwise
+     * @param string $phone
+     * @return Contact|null
      */
-    public function emailExists(string $emailAddress): bool;
+    public function findByPhone(string $phone): ?Contact;
 
     /**
-     * Update existing contact record.
+     * Check if email already exists.
      *
-     * @param int $contactId Contact identifier
-     * @param array $contactData Updated contact attributes
-     * @return Contact Updated contact instance
+     * @param string $email
+     * @return bool
      */
-    public function update(int $contactId, array $contactData): Contact;
+    public function emailExists(string $email): bool;
 
     /**
-     * Get paginated list of contacts.
+     * Search contacts by name, email or phone.
      *
-     * @param int $perPage Number of contacts per page
-     * @param string|null $search Search term
+     * @param string $search
+     * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function getPaginated(int $perPage = 10, ?string $search = null): LengthAwarePaginator;
+    public function search(string $search, int $perPage = 15): LengthAwarePaginator;
 
     /**
-     * Delete contact by identifier.
+     * Get paginated contacts ordered by name.
      *
-     * @param int $contactId Contact identifier
-     * @return bool True if deletion was successful, false otherwise
+     * @param int $perPage
+     * @return LengthAwarePaginator
      */
-    public function delete(int $contactId): bool;
+    public function paginateOrdered(int $perPage = 15): LengthAwarePaginator;
+
+    /**
+     * Get paginated trashed contacts.
+     *
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getTrashedPaginated(int $perPage = 15): LengthAwarePaginator;
+
+    /**
+     * Get all contacts including trashed.
+     *
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getAllPaginated(int $perPage = 15): LengthAwarePaginator;
+
+    /**
+     * Restore a soft-deleted contact.
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function restore(int $id): bool;
+
+    /**
+     * Force delete a contact permanently.
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function forceDelete(int $id): bool;
 }
