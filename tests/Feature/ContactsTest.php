@@ -229,4 +229,100 @@ class CreateContactsTest extends TestCase
         $this->assertCount(1, $contacts);
         $this->assertEquals('João Silva', $contacts->first()->name);
     }
+
+    #[Test]
+    public function it_should_soft_delete_contact(): void
+    {
+        $contact = \App\Models\Contact::factory()->create();
+
+        $response = $this->delete("/contacts/{$contact->id}");
+
+        $response->assertStatus(200);
+        $this->assertSoftDeleted('contacts', ['id' => $contact->id]);
+    }
+
+    #[Test]
+    public function it_should_restore_soft_deleted_contact(): void
+    {
+        $contact = \App\Models\Contact::factory()->create();
+        $contact->delete();
+
+        $repository = app(\App\Repositories\Contracts\ContactRepositoryInterface::class);
+        $result = $repository->restore($contact->id);
+
+        $this->assertTrue($result);
+        $this->assertDatabaseHas('contacts', [
+            'id' => $contact->id,
+            'deleted_at' => null
+        ]);
+    }
+
+    #[Test]
+    public function it_should_permanently_delete_contact(): void
+    {
+        $contact = \App\Models\Contact::factory()->create();
+        $contact->delete();
+
+        $repository = app(\App\Repositories\Contracts\ContactRepositoryInterface::class);
+        $result = $repository->forceDelete($contact->id);
+
+        $this->assertTrue($result);
+        $this->assertDatabaseMissing('contacts', ['id' => $contact->id]);
+    }
+
+    #[Test]
+    public function it_should_get_trashed_contacts(): void
+    {
+        $activeContact = \App\Models\Contact::factory()->create(['name' => 'Active Contact']);
+        $trashedContact = \App\Models\Contact::factory()->create(['name' => 'Trashed Contact']);
+        $trashedContact->delete();
+
+        $repository = app(\App\Repositories\Contracts\ContactRepositoryInterface::class);
+        $trashedContacts = $repository->getTrashedPaginated();
+
+        $this->assertCount(1, $trashedContacts->items());
+        $this->assertEquals('Trashed Contact', $trashedContacts->items()[0]->name);
+    }
+
+    #[Test]
+    public function it_should_get_all_contacts_including_trashed(): void
+    {
+        $activeContact = \App\Models\Contact::factory()->create(['name' => 'Active Contact']);
+        $trashedContact = \App\Models\Contact::factory()->create(['name' => 'Trashed Contact']);
+        $trashedContact->delete();
+
+        $repository = app(\App\Repositories\Contracts\ContactRepositoryInterface::class);
+        $allContacts = $repository->getAllPaginated();
+
+        $this->assertCount(2, $allContacts->items());
+    }
+
+    #[Test]
+    public function it_should_not_find_trashed_contact_with_regular_methods(): void
+    {
+        $contact = \App\Models\Contact::factory()->create();
+        $contact->delete();
+
+        $repository = app(\App\Repositories\Contracts\ContactRepositoryInterface::class);
+        $foundContact = $repository->find($contact->id);
+
+        $this->assertNull($foundContact);
+    }
+
+    #[Test]
+    public function it_should_search_trashed_contacts(): void
+    {
+        $contact1 = \App\Models\Contact::factory()->create(['name' => 'João Silva']);
+        $contact2 = \App\Models\Contact::factory()->create(['name' => 'Maria Santos']);
+        $contact1->delete();
+        $contact2->delete();
+
+        $repository = app(\App\Repositories\Contracts\ContactRepositoryInterface::class);
+        $trashedContacts = $repository->getTrashedPaginated(10);
+
+        $this->assertCount(2, $trashedContacts->items());
+        $names = collect($trashedContacts->items())->pluck('name')->toArray();
+        $this->assertContains('João Silva', $names);
+        $this->assertContains('Maria Santos', $names);
+    }
 }
