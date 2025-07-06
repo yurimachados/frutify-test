@@ -37,11 +37,22 @@ class UpdateContactUseCase
     {
         $this->validateEmailUniqueness($contactData);
 
-        return $this->contactRepository->update($contactData->id, [
+        // Find the contact first
+        $contact = $this->contactRepository->find($contactData->id);
+
+        if (!$contact) {
+            throw new \InvalidArgumentException('Contact not found');
+        }
+
+        // Update the contact
+        $this->contactRepository->update($contact, [
             'name' => $contactData->name,
             'email' => $contactData->email,
             'phone' => $this->normalizePhoneNumber($contactData->phone),
         ]);
+
+        // Return the updated contact
+        return $contact->fresh();
     }
 
     /**

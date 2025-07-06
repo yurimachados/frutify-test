@@ -25,6 +25,6 @@ class FindContactUseCase
      */
     public function execute(int $id): ?Contact
     {
-        return $this->repository->findById($id);
+        return $this->repository->find($id);
     }
 }

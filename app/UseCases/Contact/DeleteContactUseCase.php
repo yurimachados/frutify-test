@@ -24,13 +24,13 @@ class DeleteContactUseCase
     public function execute(int $contactId): bool
     {
         // Business rule: Check if contact exists
-        $contact = $this->contactRepository->findById($contactId);
+        $contact = $this->contactRepository->find($contactId);
 
         if (!$contact) {
             throw new \InvalidArgumentException('Contact not found');
         }
 
         // Delete the contact
-        return $this->contactRepository->delete($contactId);
+        return $this->contactRepository->delete($contact);
     }
 }

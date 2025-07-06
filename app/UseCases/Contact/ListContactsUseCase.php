@@ -28,6 +28,10 @@ class ListContactsUseCase
     {
         $validatedPerPage = max(1, min($perPage, 100));
 
-        return $this->repository->getPaginated($validatedPerPage, $search);
+        if ($search) {
+            return $this->repository->search($search, $validatedPerPage);
+        }
+
+        return $this->repository->paginateOrdered($validatedPerPage);
     }
 }
