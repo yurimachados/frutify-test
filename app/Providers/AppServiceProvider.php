@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Repositories\Contracts\ContactRepositoryInterface;
-use App\Repositories\EloquentContactRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,11 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Bind repository interface to implementation
-        $this->app->bind(
-            ContactRepositoryInterface::class,
-            EloquentContactRepository::class
-        );
+        //
     }
 
     /**
